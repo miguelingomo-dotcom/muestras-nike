@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muestras — Control de Cambios</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0f0f0f; --surface:#181818; --surface2:#222; --border:#2e2e2e;
+  --accent:#e8ff3e; --accent-dim:rgba(232,255,62,.10);
+  --text:#f0f0f0; --muted:#888; --dim:#555;
+  --ok:#3effa0; --error:#ff4d4d; --warn:#ffb400;
+  --h:#60a5fa; --m:#f472b6; --k:#34d399;
+  --r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding-bottom:80px}
+
+/* HEADER */
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:200}
+.logo{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo svg{width:20px;height:20px}
+.htext h1{font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:1.5px;line-height:1}
+.htext p{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* CONFIG */
+#cfg{background:linear-gradient(135deg,#1a1600,#0f0f0f);border:1px solid #4a3f00;border-left:3px solid var(--accent);margin:16px 16px 0;border-radius:var(--r);padding:14px 16px}
+#cfg h3{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.6px;margin-bottom:8px}
+#cfg p{font-size:12px;color:#ccc;line-height:1.6}
+#cfg code{font-family:'DM Mono',monospace;background:rgba(232,255,62,.1);color:var(--accent);padding:1px 5px;border-radius:4px;font-size:11px}
+.cfg-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.cfg-row input{flex:1;min-width:160px;background:#111;border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:8px 10px;outline:none;transition:border-color .2s}
+.cfg-row input:focus{border-color:var(--accent)}
+.btn-cfg{background:var(--accent);color:#000;border:none;border-radius:7px;padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+
+/* TABS */
+.tabs{display:flex;margin:16px 16px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:4px;gap:0}
+.tab{flex:1;padding:9px 4px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;border-radius:7px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px}
+.tab.active{background:var(--accent);color:#000;font-weight:700}
+.tab svg{width:14px;height:14px;flex-shrink:0}
+
+/* SECTIONS */
+.section{display:none;padding:16px}
+.section.active{display:block}
+
+/* CAT PILLS */
+.cat-pills{display:flex;gap:8px;margin-bottom:14px}
+.cpill{flex:1;padding:10px 4px;border-radius:8px;border:2px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;text-align:center}
+.cpill[data-cat="Hombre"].active{border-color:var(--h);background:rgba(96,165,250,.12);color:var(--h)}
+.cpill[data-cat="Mujer"].active{border-color:var(--m);background:rgba(244,114,182,.12);color:var(--m)}
+.cpill[data-cat="Kids"].active{border-color:var(--k);background:rgba(52,211,153,.12);color:var(--k)}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:14px}
+.card h2{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card h2 .dot{width:6px;height:6px;background:var(--accent);border-radius:50%;display:inline-block}
+
+/* FIELDS */
+.field{margin-bottom:13px}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:5px}
+.field input,.field select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;padding:11px 13px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
+.field input::placeholder{color:var(--dim)}
+.field select option{background:#1a1a1a}
+.field-num input{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;text-align:center;color:var(--h);padding:14px}
+
+/* DT BOX */
+.dtbox{background:var(--accent-dim);border:1px solid rgba(232,255,62,.2);border-radius:8px;padding:9px 13px;font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:13px;display:flex;align-items:center;gap:7px}
+
+/* BUTTONS */
+.btn{width:100%;background:var(--accent);color:#000;border:none;border-radius:8px;padding:14px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;cursor:pointer;transition:opacity .2s,transform .1s;margin-top:2px}
+.btn:hover{opacity:.88}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:13px}
+.stat .n{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;color:var(--accent)}
+.stat .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.stat.urgent .n{color:var(--error)}
+.stat.full{grid-column:1/-1}
+
+/* ALERT */
+.alert-banner{background:linear-gradient(135deg,#2a0a0a,#1a0000);border:1px solid #7a1a1a;border-left:3px solid var(--error);border-radius:var(--r);padding:13px 15px;margin-bottom:14px;animation:pulseR 2.5s ease-in-out infinite}
+@keyframes pulseR{0%,100%{border-left-color:#ff4d4d}50%{border-left-color:#ff9999}}
+.alert-title{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--error);letter-spacing:1px;display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.alert-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip-err{background:rgba(255,77,77,.14);border:1px solid rgba(255,77,77,.3);border-radius:100px;padding:3px 10px;font-family:'DM Mono',monospace;font-size:11.5px;color:#ff9999}
+
+/* FILTER PILLS */
+.fpills{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.fpill{padding:6px 12px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s}
+.fpill.active{background:var(--surface2);color:var(--text);border-color:var(--dim)}
+.fpill[data-f="Hombre"].active{border-color:var(--h);color:var(--h)}
+.fpill[data-f="Mujer"].active{border-color:var(--m);color:var(--m)}
+.fpill[data-f="Kids"].active{border-color:var(--k);color:var(--k)}
+
+/* SEARCH */
+.sbar{position:relative;margin-bottom:12px}
+.sbar input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 13px 10px 36px;outline:none;transition:border-color .2s}
+.sbar input:focus{border-color:var(--accent)}
+.sbar svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--dim);pointer-events:none}
+
+/* REFRESH BTN */
+.btn-ref{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:11px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:14px}
+.btn-ref:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ref svg{width:14px;height:14px;transition:transform .4s}
+.btn-ref.loading svg{animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* RECORDS */
+.rlist{display:flex;flex-direction:column;gap:9px}
+.rec{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;animation:sIn .22s ease}
+@keyframes sIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.rec.overdue{border-color:rgba(255,77,77,.4);background:linear-gradient(135deg,#1a0a0a,#181818)}
+.rec.warning{border-color:rgba(255,180,0,.35);background:linear-gradient(135deg,#1a1200,#181818)}
+.rec-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.rec-num{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent);letter-spacing:1px;line-height:1}
+.rec-right{display:flex;align-items:center;gap:6px}
+.ctag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;letter-spacing:.4px}
+.ctag.Hombre{background:rgba(96,165,250,.15);color:var(--h)}
+.ctag.Mujer{background:rgba(244,114,182,.15);color:var(--m)}
+.ctag.Kids{background:rgba(52,211,153,.15);color:var(--k)}
+.dbadge{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;padding:2px 8px;border-radius:100px}
+.dbadge.ok{background:rgba(62,255,160,.12);color:var(--ok)}
+.dbadge.warn{background:rgba(255,180,0,.15);color:var(--warn)}
+.dbadge.over{background:rgba(255,77,77,.18);color:var(--error);font-weight:700}
+.rec-ref{font-size:14px;font-weight:600;margin-bottom:5px}
+.rec-meta{display:flex;justify-content:space-between;align-items:center}
+.rec-who{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px}
+.rec-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim)}
+
+/* MODELS */
+.mgrid{display:flex;flex-direction:column;gap:9px}
+.mitem{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.minfo{flex:1;min-width:0}
+.mname{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn-del{background:rgba(255,77,77,.1);border:1px solid rgba(255,77,77,.25);color:var(--error);border-radius:7px;padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s}
+.btn-del:hover{background:rgba(255,77,77,.22)}
+
+/* SKELETON */
+.skel{background:var(--surface);border-radius:var(--r);height:78px;animation:pulse 1.4s ease-in-out infinite;margin-bottom:9px}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:.8}}
+
+/* MODAL */
+#modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:500;align-items:flex-end;justify-content:center;padding:20px}
+#modal-ov.open{display:flex}
+#modal-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;width:100%;max-width:400px}
+#modal-box h3{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--error);margin-bottom:8px}
+#modal-box p{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:18px}
+.modal-btns{display:flex;gap:8px}
+.modal-btns button{flex:1;padding:12px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none}
+#mb-cancel{background:var(--surface2);color:var(--text)}
+#mb-confirm{background:var(--error);color:#fff}
+
+/* EMPTY & TOAST */
+.empty{text-align:center;padding:36px 20px;color:var(--dim)}
+.empty svg{width:34px;height:34px;margin-bottom:10px;opacity:.3}
+.empty p{font-size:13px}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ok);color:#000;font-weight:700;font-size:13px;padding:11px 22px;border-radius:100px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);z-index:999;white-space:nowrap;pointer-events:none}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.err{background:var(--error);color:#fff}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M3 17l3-8 4 3 3-6 5 11H3z"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+  </div>
+  <div class="htext">
+    <h1>MUESTRAS</h1>
+    <p>Control de cambios · Tienda</p>
+  </div>
+</header>
+
+<div id="cfg">
+  <h3>⚙ CONFIGURACIÓN</h3>
+  <p>ID del Google Sheet (en la URL entre <code>/d/</code> y <code>/edit</code>) y nombre de la hoja.</p>
+  <div class="cfg-row">
+    <input type="text" id="cfg-id"   placeholder="ID del Google Sheet..." />
+    <input type="text" id="cfg-name" placeholder="Nombre hoja (ej: Muestras)" value="Muestras" />
+    <button class="btn-cfg" onclick="saveConfig()">Guardar</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('form',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    Cambio
+  </button>
+  <button class="tab" onclick="switchTab('history',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="3"/></svg>
+    Historial
+  </button>
+  <button class="tab" onclick="switchTab('models',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+    Modelos
+  </button>
+</div>
+
+<!-- ══ TAB CAMBIO ══ -->
+<div id="tab-form" class="section active">
+  <div class="card">
+    <h2><span class="dot"></span>Nuevo cambio de muestra</h2>
+
+    <div class="field">
+      <label>Categoría</label>
+      <div class="cat-pills">
+        <button class="cpill" data-cat="Hombre" onclick="selectCat(this)">👟 Hombre</button>
+        <button class="cpill" data-cat="Mujer"  onclick="selectCat(this)">👟 Mujer</button>
+        <button class="cpill" data-cat="Kids"   onclick="selectCat(this)">🧒 Kids</button>
+      </div>
+    </div>
+
+    <div class="field field-num">
+      <label>Nº Etiqueta</label>
+      <input type="number" id="f-num" placeholder="001" inputmode="numeric" />
+    </div>
+
+    <div class="field">
+      <label>Modelo</label>
+      <select id="f-ref">
+        <option value="">— Selecciona categoría primero —</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Quién hace el cambio</label>
+      <input type="text" id="f-who" placeholder="Tu nombre..." autocomplete="name" />
+    </div>
+
+    <div class="dtbox">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span id="dt-text">—</span>
+    </div>
+
+    <button class="btn" id="btn-submit" onclick="submitRecord()">✓ REGISTRAR CAMBIO</button>
+  </div>
+</div>
+
+<!-- ══ TAB HISTORIAL ══ -->
+<div id="tab-history" class="section">
+  <div class="stats-row">
+    <div class="stat"><div class="n" id="st-total">—</div><div class="l">Total registros</div></div>
+    <div class="stat"><div class="n" id="st-today">—</div><div class="l">Hoy</div></div>
+    <div class="stat urgent full" id="st-overdue-card" style="display:none">
+      <div class="n" id="st-overdue">0</div>
+      <div class="l">⚠ Sin cambiar (+15 días)</div>
+    </div>
+  </div>
+
+  <div id="alert-div"></div>
+
+  <div class="fpills">
+    <button class="fpill active" data-f="Todos"  onclick="setHFilter('Todos',this)">Todos</button>
+    <button class="fpill"        data-f="Hombre" onclick="setHFilter('Hombre',this)">👟 Hombre</button>
+    <button class="fpill"        data-f="Mujer"  onclick="setHFilter('Mujer',this)">👠 Mujer</button>
+    <button class="fpill"        data-f="Kids"   onclick="setHFilter('Kids',this)">🧒 Kids</button>
+  </div>
+
+  <div class="sbar">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="search-in" placeholder="Buscar nº, modelo, persona..." oninput="applyFilters()" />
+  </div>
+
+  <button class="btn-ref" id="btn-ref" onclick="loadHistory()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    Actualizar historial
+  </button>
+
+  <div id="rec-container">
+    <div class="empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+      <p>Pulsa "Actualizar historial" para cargar los datos</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB MODELOS ══ -->
+<div id="tab-models" class="section">
+  <div class="card">
+    <h2><span class="dot"></span>Añadir modelo nuevo</h2>
+    <div class="field">
+      <label>Categoría</label>
+      <div class="cat-pills">
+        <button class="cpill" data-cat="Hombre" onclick="pickModelCat(this)">👟 Hombre</button>
+        <button class="cpill" data-cat="Mujer"  onclick="pickModelCat(this)">👟 Mujer</button>
+        <button class="cpill" data-cat="Kids"   onclick="pickModelCat(this)">🧒 Kids</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Nombre / Referencia</label>
+      <input type="text" id="m-name" placeholder="Nike Air Max 270, REF-4521..." />
+    </div>
+    <button class="btn" onclick="addModel()">+ AÑADIR MODELO</button>
+  </div>
+
+  <div class="card">
+    <h2><span class="dot"></span>Modelos activos</h2>
+    <div class="fpills" id="mfpills">
+      <button class="fpill active" data-f="Todos"  onclick="setMFilter('Todos',this)">Todos</button>
+      <button class="fpill"        data-f="Hombre" onclick="setMFilter('Hombre',this)">👟 Hombre</button>
+      <button class="fpill"        data-f="Mujer"  onclick="setMFilter('Mujer',this)">👠 Mujer</button>
+      <button class="fpill"        data-f="Kids"   onclick="setMFilter('Kids',this)">🧒 Kids</button>
+    </div>
+    <div id="models-list"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="modal-ov">
+  <div id="modal-box">
+    <h3>⚠ Eliminar modelo</h3>
+    <p id="modal-txt">¿Seguro? El historial existente no se verá afectado.</p>
+    <div class="modal-btns">
+      <button id="mb-cancel"  onclick="closeModal()">Cancelar</button>
+      <button id="mb-confirm" onclick="confirmDel()">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══ STATE ══
+let CFG = {
+  sheetId:   localStorage.getItem('ms_sheetId')   || '',
+  sheetName: localStorage.getItem('ms_sheetName') || 'Muestras',
+  scriptUrl: localStorage.getItem('ms_scriptUrl') || ''
+};
+const DEFAULT_MODELS = [{"name":"AIR FORCE 1 RETRO (HV2021-200)","cat":"Hombre"},{"name":"AIR MAX COMMAND (629993-020)","cat":"Hombre"},{"name":"AIR MAX DN (IB3078-010)","cat":"Hombre"},{"name":"AIR MAX DN8 LTR SP (II7058-200)","cat":"Hombre"},{"name":"AIR MAX DN8 SE (HV4525-400)","cat":"Hombre"},{"name":"AIR MAX TORCH 4 (343846-012)","cat":"Hombre"},{"name":"AIR WINFLO 10 (DV4022-002)","cat":"Hombre"},{"name":"AIR WINFLO 10 (DV4022-007)","cat":"Hombre"},{"name":"AIR ZOOM SPIRIDON (HM8497-010)","cat":"Hombre"},{"name":"GIANNIS FREAK 7 SE (IM5839-001)","cat":"Hombre"},{"name":"JORDAN COURTSIDE 2 (AR1000-023)","cat":"Hombre"},{"name":"JORDAN COURTSIDE 2 (AR1000-100)","cat":"Hombre"},{"name":"JORDAN STADIUM 90 (HF5258-002)","cat":"Hombre"},{"name":"JORDAN STADIUM 90 (HF5258-102)","cat":"Hombre"},{"name":"LEBRON WITNESS IX (HQ8034-400)","cat":"Hombre"},{"name":"LEGEND 10 ACADEMY (DV4337-402)","cat":"Hombre"},{"name":"LEGEND 10 ACADEMY (DV4337-800)","cat":"Hombre"},{"name":"LEGEND 10 ACADEMY (DV4338-002)","cat":"Hombre"},{"name":"M AIR MAX ALPHA TR (FQ1833-003)","cat":"Hombre"},{"name":"M NIKE AIR MAX ALP (DM0829-003)","cat":"Hombre"},{"name":"M NIKE AIR MAX ALP (DM0829-010)","cat":"Hombre"},{"name":"NIKE AIR MAX 1 '86 (FV7477-002)","cat":"Hombre"},{"name":"NIKE AIR ZOOM PEGA (DH4071-001)","cat":"Hombre"},{"name":"NIKE AIR ZOOM PEGA (DH4071-002)","cat":"Hombre"},{"name":"NIKE AIR ZOOM PEGA (DH4071-007)","cat":"Hombre"},{"name":"NIKE AIR ZOOM VOME (DA7245-011)","cat":"Hombre"},{"name":"NIKE DOWNSHIFTER 1 (DD9293-001)","cat":"Hombre"},{"name":"NIKE DOWNSHIFTER 1 (DD9293-004)","cat":"Hombre"},{"name":"NIKE EBERNON LOW (AQ1775-003)","cat":"Hombre"},{"name":"NIKE EBERNON LOW (AQ1775-100)","cat":"Hombre"},{"name":"NIKE EBERNON LOW P (AQ1774-102)","cat":"Hombre"},{"name":"NIKE FIELD GENERAL (HF3165-001)","cat":"Hombre"},{"name":"NIKE GATO SE (IH3370-010)","cat":"Hombre"},{"name":"NIKE JUNIPER TRAIL (DM0822-006)","cat":"Hombre"},{"name":"NIKE JUNIPER TRAIL (DM0822-200)","cat":"Hombre"},{"name":"NIKE LUNAR ROAM (DV2440-002)","cat":"Hombre"},{"name":"NIKE REVOLUTION 7 (FB2207-001)","cat":"Hombre"},{"name":"NIKE REVOLUTION 7 (FB2207-100)","cat":"Hombre"},{"name":"NIKE REVOLUTION 7 (FB2207-400)","cat":"Hombre"},{"name":"NIKE RUN SWIFT 2 (CU3517-002)","cat":"Hombre"},{"name":"NIKE RUN SWIFT 2 (CU3517-006)","cat":"Hombre"},{"name":"NIKE ZOOM VOMERO 5 (FJ4151-007)","cat":"Hombre"},{"name":"PHANTOM 6 LOW ACD (HQ2321-400)","cat":"Hombre"},{"name":"PHANTOM GX II ACAD (FD6723-300)","cat":"Hombre"},{"name":"PHANTOM LUNA II AC (FD6725-300)","cat":"Hombre"},{"name":"REACT PEGASUS TRAI (HM9728-002)","cat":"Hombre"},{"name":"TOTAL 90 (HQ2851-401)","cat":"Hombre"},{"name":"ZM SUPERFLY 10 ACA (FQ1456-600)","cat":"Hombre"},{"name":"ZM VAPOR 16 PRO FG (FQ8685-600)","cat":"Hombre"},{"name":"ZOOM VAPOR 15 ACAD (DJ5630-001)","cat":"Hombre"},{"name":"ZOOM VAPOR 15 ACAD (DJ5630-300)","cat":"Hombre"},{"name":"AIR FORCE 1 (GS) (FV5948-101)","cat":"Kids"},{"name":"AIR MAX DN8 (GS) (HF7310-400)","cat":"Kids"},{"name":"FLEX RUNNER 3 (PS) (FN1449-002)","cat":"Kids"},{"name":"JR LEGEND 10 ACADE (DV4348-002)","cat":"Kids"},{"name":"JR ZM SUPERFLY 10 (HF3417-801)","cat":"Kids"},{"name":"JR ZM VAPOR 16 PRO (HF5448-700)","cat":"Kids"},{"name":"NIKE AIR MAX INVIG (749572-017)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (870026-100)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (BQ5448-001)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (BQ5448-100)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (BQ5451-001)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (BQ5451-100)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (BQ5451-108)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (BQ5453-001)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (BQ5453-100)","cat":"Kids"},{"name":"NIKE COURT ROYALE (833536-002)","cat":"Kids"},{"name":"NIKE FLEX RUNNER 2 (DJ6039-002)","cat":"Kids"},{"name":"NIKE KILLSHOT 2 (G (IF0500-001)","cat":"Kids"},{"name":"NIKE STAR RUNNER 4 (DX7614-002)","cat":"Kids"},{"name":"NIKE STAR RUNNER 4 (DX7614-602)","cat":"Kids"},{"name":"NIKE STAR RUNNER 4 (DX7615-001)","cat":"Kids"},{"name":"NIKE STAR RUNNER 4 (DX7615-002)","cat":"Kids"},{"name":"W AIR MAX DN8 (HF5509-001)","cat":"Mujer"},{"name":"W AIR MAX DN8 (HF5509-400)","cat":"Mujer"},{"name":"W AIR MAX DN8 (HF5509-601)","cat":"Mujer"},{"name":"W AIR MAX MUSE - R (IB2221-001)","cat":"Mujer"},{"name":"W AIR MAX MUSE - R (IB2221-002)","cat":"Mujer"},{"name":"W AIR WINFLO 10 (DV4023-003)","cat":"Mujer"},{"name":"W AIR WINFLO 10 (DV4023-010)","cat":"Mujer"},{"name":"W AIR WINFLO 10 (HF0738-101)","cat":"Mujer"},{"name":"W NIKE DOWNSHIFTER (DD9294-002)","cat":"Mujer"},{"name":"W NIKE DOWNSHIFTER (DD9294-008)","cat":"Mujer"},{"name":"W NIKE DOWNSHIFTER (DD9294-600)","cat":"Mujer"},{"name":"W NIKE DUNK LOW NE (DD1873-102)","cat":"Mujer"},{"name":"W NIKE FREE METCON (DV3950-001)","cat":"Mujer"},{"name":"W NIKE FREE METCON (DV3950-100)","cat":"Mujer"},{"name":"W NIKE FREE METCON (DV3950-200)","cat":"Mujer"},{"name":"W NIKE FREE METCON (DV3950-500)","cat":"Mujer"},{"name":"W NIKE INTERACT RU (FZ3742-133)","cat":"Mujer"},{"name":"W NIKE M2K TEKNO (BQ3378-100)","cat":"Mujer"},{"name":"W NIKE M2K TEKNO E (CJ9583-100)","cat":"Mujer"},{"name":"W NIKE MC TRAINER (DM0824-104)","cat":"Mujer"},{"name":"W NIKE MC TRAINER (DM0824-105)","cat":"Mujer"},{"name":"W NIKE REACT PEGAS (DJ6159-200)","cat":"Mujer"},{"name":"W NIKE REACT PEGAS (FZ3778-072)","cat":"Mujer"},{"name":"W NIKE REVOLUTION (FB2208-604)","cat":"Mujer"},{"name":"W NIKE VERSAIR (DZ3547-100)","cat":"Mujer"},{"name":"W NIKE ZOOM BELLA (DR5720-001)","cat":"Mujer"},{"name":"W NIKE ZOOM BELLA (DR5720-100)","cat":"Mujer"},{"name":"W NIKE ZOOM BELLA (DR5720-105)","cat":"Mujer"},{"name":"WMNS AIR MAX COMMA (397690-169)","cat":"Mujer"},{"name":"WMNS AIR MAX COMMA (718896-228)","cat":"Mujer"},{"name":"WMNS NIKE AIR HEIG (CI0603-102)","cat":"Mujer"},{"name":"WMNS NIKE AIR MAX (CU4152-100)","cat":"Mujer"},{"name":"WMNS NIKE AIR WINF (DR9831-001)","cat":"Mujer"},{"name":"WMNS NIKE AIR ZOOM (DH4072-001)","cat":"Mujer"},{"name":"WMNS NIKE AIR ZOOM (DH4072-003)","cat":"Mujer"},{"name":"WMNS NIKE COURT RO (749867-105)","cat":"Mujer"},{"name":"WMNS NIKE JUNIPER (DM0821-104)","cat":"Mujer"},{"name":"WMNS NIKE MOTIVA (DV1238-001)","cat":"Mujer"},{"name":"WMNS NIKE QUEST 5 (DD9291-601)","cat":"Mujer"},{"name":"WMNS NIKE ZOOM SPA (CQ9267-004)","cat":"Mujer"},{"name":"WMNS NIKE ZOOM SPA (CQ9267-008)","cat":"Mujer"}];
+
+// Control de versión: si cambia, resetea modelos automáticamente
+const APP_VERSION = '3';
+if (localStorage.getItem('ms_version') !== APP_VERSION) {
+  localStorage.setItem('ms_models', JSON.stringify(DEFAULT_MODELS));
+  localStorage.setItem('ms_version', APP_VERSION);
+}
+let MODELS = JSON.parse(localStorage.getItem('ms_models'));
+let allRecs  = [];
+let selCat   = '';
+let selectedModelCat  = '';
+let hFilter  = 'Todos';
+let mFilter  = 'Todos';
+let pendDel  = null;
+
+const OVERDUE = 15, WARN = 10;
+
+// ══ INIT ══
+window.onload = () => {
+  updateClock(); setInterval(updateClock, 1000);
+  if (CFG.sheetId) {
+    document.getElementById('cfg-id').value   = CFG.sheetId;
+    document.getElementById('cfg-name').value = CFG.sheetName;
+    document.getElementById('cfg').style.borderLeftColor = '#3effa0';
+  }
+  const lw = localStorage.getItem('ms_lastWho');
+  if (lw) document.getElementById('f-who').value = lw;
+  renderModels();
+};
+
+function updateClock() {
+  document.getElementById('dt-text').textContent =
+    new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'});
+}
+
+// ══ CONFIG ══
+function saveConfig() {
+  const id   = document.getElementById('cfg-id').value.trim();
+  const name = document.getElementById('cfg-name').value.trim() || 'Muestras';
+  if (!id) { toast('Introduce el ID del Sheet',true); return; }
+  CFG.sheetId = id; CFG.sheetName = name;
+  localStorage.setItem('ms_sheetId', id);
+  localStorage.setItem('ms_sheetName', name);
+  toast('Configuración guardada ✓');
+  document.getElementById('cfg').style.borderLeftColor = '#3effa0';
+}
+// Llama desde consola: saveScriptUrl('https://...')
+function saveScriptUrl(url) {
+  localStorage.setItem('ms_scriptUrl', url);
+  CFG.scriptUrl = url;
+  toast('Script URL guardado ✓');
+}
+
+// ══ TABS ══
+function switchTab(t, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + t).classList.add('active');
+  btn.classList.add('active');
+  if (t === 'history' && allRecs.length === 0) loadHistory();
+  if (t === 'models') renderModels();
+}
+
+// ══ CATEGORY (FORM) ══
+function selectCat(btn) {
+  document.querySelectorAll('#tab-form .cpill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selCat = btn.dataset.cat;
+  populateDrop();
+}
+function populateDrop() {
+  const sel = document.getElementById('f-ref');
+  const list = MODELS.filter(m => m.cat === selCat);
+  sel.innerHTML = list.length
+    ? `<option value="">— Selecciona modelo —</option>` + list.map(m=>`<option value="${m.name}">${m.name}</option>`).join('')
+    : `<option value="">— Sin modelos en ${selCat} —</option>`;
+}
+
+// ══ SUBMIT ══
+async function submitRecord() {
+  const num = document.getElementById('f-num').value.trim();
+  const ref = document.getElementById('f-ref').value.trim();
+  const who = document.getElementById('f-who').value.trim();
+  if (!selCat) { toast('Selecciona una categoría',true); return; }
+  if (!num)    { toast('Introduce el nº de etiqueta',true); return; }
+  if (!ref)    { toast('Selecciona un modelo',true); return; }
+  if (!who)    { toast('Introduce tu nombre',true); return; }
+  if (!CFG.sheetId)   { toast('Configura el Google Sheet primero',true); return; }
+  if (!CFG.scriptUrl) { toast('Falta Script URL — escribe en consola: saveScriptUrl("URL")',true); return; }
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+  const fecha = new Date().toLocaleString('es-ES');
+  try {
+    const p = new URLSearchParams({num,ref,who,cat:selCat,fecha,sheetId:CFG.sheetId,sheetName:CFG.sheetName});
+    await fetch(CFG.scriptUrl+'?'+p.toString(),{method:'GET',mode:'no-cors'});
+    allRecs.unshift({num,ref,who,cat:selCat,fecha});
+    localStorage.setItem('ms_lastWho',who);
+    toast('✓ Cambio registrado');
+    document.getElementById('f-num').value = '';
+    document.getElementById('f-ref').value = '';
+  } catch(e) { toast('Error de conexión',true); }
+  btn.disabled = false; btn.textContent = '✓ REGISTRAR CAMBIO';
+}
+
+// ══ HISTORY ══
+async function loadHistory() {
+  if (!CFG.scriptUrl || !CFG.sheetId) { toast('Configura Sheet y Script URL primero',true); return; }
+  const btn = document.getElementById('btn-ref');
+  btn.classList.add('loading');
+  const c = document.getElementById('rec-container');
+  c.innerHTML = '<div class="skel"></div><div class="skel"></div><div class="skel"></div>';
+  try {
+    const p = new URLSearchParams({action:'read',sheetId:CFG.sheetId,sheetName:CFG.sheetName});
+    const res  = await fetch(CFG.scriptUrl+'?'+p.toString());
+    const data = await res.json();
+    allRecs = data.records || [];
+    applyFilters();
+    updateStats();
+  } catch(e) {
+    c.innerHTML = '<div class="empty"><p>Error cargando datos. Revisa la configuración.</p></div>';
+  }
+  btn.classList.remove('loading');
+}
+
+function setHFilter(f, btn) {
+  hFilter = f;
+  document.querySelectorAll('#tab-history .fpill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+function applyFilters() {
+  const q = (document.getElementById('search-in').value||'').toLowerCase();
+  let list = allRecs;
+  if (hFilter !== 'Todos') list = list.filter(r => r.cat === hFilter);
+  if (q) list = list.filter(r =>
+    String(r.num).includes(q)||
+    (r.ref||'').toLowerCase().includes(q)||
+    (r.who||'').toLowerCase().includes(q)
+  );
+  renderRecs(list);
+}
+
+// ── days ──
+function parseFecha(s) {
+  if (!s) return null;
+  const [dp] = s.split(',');
+  const pts = (dp||'').trim().split('/');
+  if (pts.length!==3) return null;
+  const [d,m,y] = pts.map(Number);
+  return new Date(y,m-1,d);
+}
+function daysAgo(s) {
+  const d = parseFecha(s);
+  if (!d||isNaN(d)) return null;
+  return Math.floor((Date.now()-d.getTime())/86400000);
+}
+function latestPerSample(recs) {
+  const map={};
+  recs.forEach(r=>{ if(!map[r.num]) map[r.num]=r; });
+  return Object.values(map);
+}
+
+function renderRecs(recs) {
+  const c = document.getElementById('rec-container');
+  if (!recs.length) {
+    c.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg><p>Sin registros</p></div>';
+    return;
+  }
+  c.innerHTML='<div class="rlist">'+recs.map(r=>{
+    const d=daysAgo(r.fecha);
+    let bc='ok',bt='',cc='',ic='';
+    if(d===null){bt='?d';}
+    else if(d>=OVERDUE){bc='over';bt=`${d}d ⚠`;cc='overdue';ic='🔴 ';}
+    else if(d>=WARN){bc='warn';bt=`${d}d`;cc='warning';ic='🟡 ';}
+    else{bt=d===0?'Hoy':d===1?'1d':`${d}d`;}
+    return `<div class="rec ${cc}">
+      <div class="rec-top">
+        <div class="rec-num">${ic}#${String(r.num).padStart(3,'0')}</div>
+        <div class="rec-right">
+          ${r.cat?`<span class="ctag ${r.cat}">${r.cat}</span>`:''}
+          <span class="dbadge ${bc}">${bt}</span>
+        </div>
+      </div>
+      <div class="rec-ref">${r.ref||'—'}</div>
+      <div class="rec-meta">
+        <span class="rec-who"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${r.who||'—'}</span>
+        <span class="rec-date">${r.fecha||''}</span>
+      </div>
+    </div>`;
+  }).join('')+'</div>';
+}
+
+function updateStats() {
+  document.getElementById('st-total').textContent = allRecs.length;
+  const today = new Date().toLocaleDateString('es-ES');
+  document.getElementById('st-today').textContent = allRecs.filter(r=>(r.fecha||'').includes(today)).length;
+
+  const latest  = latestPerSample(allRecs);
+  const overdue = latest.filter(r=>{ const d=daysAgo(r.fecha); return d!==null&&d>=OVERDUE; });
+  const adiv    = document.getElementById('alert-div');
+  const scard   = document.getElementById('st-overdue-card');
+
+  if (overdue.length) {
+    scard.style.display='block';
+    document.getElementById('st-overdue').textContent = overdue.length;
+    const chips = overdue.map(r=>`<span class="chip-err">#${String(r.num).padStart(3,'0')} · ${daysAgo(r.fecha)}d${r.cat?' · '+r.cat:''}</span>`).join('');
+    adiv.innerHTML=`<div class="alert-banner"><div class="alert-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>${overdue.length} MUESTRA${overdue.length>1?'S':''} SIN CAMBIAR (+15 DÍAS)</div><div class="alert-chips">${chips}</div></div>`;
+  } else {
+    scard.style.display='none';
+    adiv.innerHTML='';
+  }
+}
+
+// ══ MODELS ══
+function pickModelCat(btn) {
+  document.querySelectorAll('#tab-models .cpill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedModelCat = btn.dataset.cat;
+}
+function saveMods() { localStorage.setItem('ms_models',JSON.stringify(MODELS)); }
+
+function addModel() {
+  const name = document.getElementById('m-name').value.trim();
+  if (!selectedModelCat) { toast('Selecciona categoría',true); return; }
+  if (!name)    { toast('Introduce el nombre del modelo',true); return; }
+  if (MODELS.find(m=>m.name.toLowerCase()===name.toLowerCase()&&m.cat===selectedModelCat)) {
+    toast('Ese modelo ya existe en esa categoría',true); return;
+  }
+  MODELS.push({name,cat:selectedModelCat});
+  saveMods();
+  document.getElementById('m-name').value='';
+  toast(`✓ Modelo añadido en ${selectedModelCat}`);
+  renderModels();
+  populateDrop();
+}
+
+function setMFilter(f,btn) {
+  mFilter=f;
+  document.querySelectorAll('#mfpills .fpill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderModels();
+}
+
+function renderModels() {
+  const el = document.getElementById('models-list');
+  if (!el) return;
+  const list = mFilter==='Todos' ? MODELS : MODELS.filter(m=>m.cat===mFilter);
+  if (!list.length) {
+    el.innerHTML='<div class="empty" style="padding:18px 0"><p>Sin modelos. Añade el primero arriba.</p></div>';
+    return;
+  }
+  el.innerHTML='<div class="mgrid">'+list.map(m=>{
+    const ri=MODELS.indexOf(m);
+    return `<div class="mitem">
+      <div class="minfo">
+        <div class="mname">${m.name}</div>
+        <span class="ctag ${m.cat}" style="margin-top:4px;display:inline-block">${m.cat}</span>
+      </div>
+      <button class="btn-del" onclick="askDel(${ri})">Eliminar</button>
+    </div>`;
+  }).join('')+'</div>';
+}
+
+function askDel(idx) {
+  pendDel=idx;
+  document.getElementById('modal-txt').textContent=
+    `¿Eliminar "${MODELS[idx].name}" (${MODELS[idx].cat})? El historial no se verá afectado.`;
+  document.getElementById('modal-ov').classList.add('open');
+}
+function closeModal() { pendDel=null; document.getElementById('modal-ov').classList.remove('open'); }
+function confirmDel() {
+  if (pendDel===null) return;
+  MODELS.splice(pendDel,1);
+  saveMods(); closeModal();
+  toast('Modelo eliminado');
+  renderModels(); populateDrop();
+}
+document.getElementById('modal-ov').addEventListener('click',e=>{
+  if(e.target===document.getElementById('modal-ov')) closeModal();
+});
+
+// ══ TOAST ══
+function toast(msg,isErr=false) {
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className=isErr?'err show':'show';
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+</script>
+</body>
+</html>
