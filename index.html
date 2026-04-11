@@ -6,158 +6,200 @@
 <title>Muestras — Control de Cambios</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+/* ── DARK (default) ── */
 :root {
   --bg:#0f0f0f; --surface:#181818; --surface2:#222; --border:#2e2e2e;
   --accent:#e8ff3e; --accent-dim:rgba(232,255,62,.10);
   --text:#f0f0f0; --muted:#888; --dim:#555;
   --ok:#3effa0; --error:#ff4d4d; --warn:#ffb400;
   --h:#60a5fa; --m:#f472b6; --k:#34d399;
+  --fw:#60a5fa; --ap:#fbbf24;
   --r:10px;
 }
+/* ── LIGHT ── */
+body.light {
+  --bg:#f4f4f4; --surface:#fff; --surface2:#f0f0f0; --border:#e0e0e0;
+  --accent:#d4e800; --accent-dim:rgba(212,232,0,.12);
+  --text:#111; --muted:#666; --dim:#aaa;
+  --ok:#16a34a; --error:#dc2626; --warn:#d97706;
+  --h:#2563eb; --m:#db2777; --k:#059669;
+  --fw:#2563eb; --ap:#d97706;
+}
+
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding-bottom:80px}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding-bottom:80px;transition:background .25s,color .25s}
 
 /* HEADER */
-header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:200}
-.logo{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.logo svg{width:20px;height:20px}
-.htext h1{font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:1.5px;line-height:1}
-.htext p{font-size:11px;color:var(--muted);margin-top:2px}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:200}
+.logo{width:34px;height:34px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo svg{width:19px;height:19px}
+.htext{flex:1}
+.htext h1{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1.5px;line-height:1}
+.htext p{font-size:11px;color:var(--muted);margin-top:1px}
+.theme-btn{background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);padding:7px 10px;font-size:16px;cursor:pointer;transition:all .2s;flex-shrink:0}
+.theme-btn:hover{border-color:var(--accent);color:var(--text)}
 
 #cfg{display:none}
-#cfg h3{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.6px;margin-bottom:8px}
-#cfg p{font-size:12px;color:#ccc;line-height:1.6}
-#cfg code{font-family:'DM Mono',monospace;background:rgba(232,255,62,.1);color:var(--accent);padding:1px 5px;border-radius:4px;font-size:11px}
-.cfg-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.cfg-row input{flex:1;min-width:160px;background:#111;border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:8px 10px;outline:none;transition:border-color .2s}
-.cfg-row input:focus{border-color:var(--accent)}
-.btn-cfg{background:var(--accent);color:#000;border:none;border-radius:7px;padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
 
 /* TABS */
-.tabs{display:flex;margin:16px 16px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:4px;gap:0}
+.tabs{display:flex;margin:14px 14px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:4px;gap:0}
 .tab{flex:1;padding:9px 4px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;border-radius:7px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px}
 .tab.active{background:var(--accent);color:#000;font-weight:700}
 .tab svg{width:14px;height:14px;flex-shrink:0}
 
 /* SECTIONS */
-.section{display:none;padding:16px}
+.section{display:none;padding:14px}
 .section.active{display:block}
 
 /* CAT PILLS */
-.cat-pills{display:flex;gap:8px;margin-bottom:14px}
-.cpill{flex:1;padding:10px 4px;border-radius:8px;border:2px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .18s;text-align:center}
+.cat-pills{display:flex;gap:7px;margin-bottom:12px}
+.cpill{flex:1;padding:9px 4px;border-radius:8px;border:2px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;text-align:center}
 .cpill[data-cat="Hombre"].active{border-color:var(--h);background:rgba(96,165,250,.12);color:var(--h)}
 .cpill[data-cat="Mujer"].active{border-color:var(--m);background:rgba(244,114,182,.12);color:var(--m)}
 .cpill[data-cat="Kids"].active{border-color:var(--k);background:rgba(52,211,153,.12);color:var(--k)}
 
+/* ZONE PILLS */
+.zone-pills{display:flex;gap:7px;margin-bottom:12px}
+.zpill{flex:1;padding:9px 4px;border-radius:8px;border:2px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;text-align:center}
+.zpill[data-zone="Footwear"].active{border-color:var(--fw);background:rgba(96,165,250,.12);color:var(--fw)}
+.zpill[data-zone="Apparel"].active{border-color:var(--ap);background:rgba(251,191,36,.12);color:var(--ap)}
+
 /* CARD */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:14px}
-.card h2{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.card h2{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .card h2 .dot{width:6px;height:6px;background:var(--accent);border-radius:50%;display:inline-block}
 
 /* FIELDS */
-.field{margin-bottom:13px}
+.field{margin-bottom:12px}
 .field label{display:block;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:5px}
-.field input,.field select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;padding:11px 13px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
+.field input,.field select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;padding:10px 12px;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
 .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
 .field input:focus,.field select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
 .field input::placeholder{color:var(--dim)}
-.field select option{background:#1a1a1a}
-.field-num input{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;text-align:center;color:var(--h);padding:14px}
+.field select option{background:var(--surface)}
+.field-num input{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;text-align:center;color:var(--h);padding:13px}
 
 /* DT BOX */
-.dtbox{background:var(--accent-dim);border:1px solid rgba(232,255,62,.2);border-radius:8px;padding:9px 13px;font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:13px;display:flex;align-items:center;gap:7px}
+.dtbox{background:var(--accent-dim);border:1px solid rgba(232,255,62,.2);border-radius:8px;padding:9px 13px;font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+body.light .dtbox{border-color:rgba(180,200,0,.3)}
 
 /* BUTTONS */
-.btn{width:100%;background:var(--accent);color:#000;border:none;border-radius:8px;padding:14px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;cursor:pointer;transition:opacity .2s,transform .1s;margin-top:2px}
+.btn{width:100%;background:var(--accent);color:#000;border:none;border-radius:8px;padding:13px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;cursor:pointer;transition:opacity .2s,transform .1s;margin-top:2px}
 .btn:hover{opacity:.88}
 .btn:active{transform:scale(.98)}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 
-/* STATS */
-.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:13px}
-.stat .n{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;color:var(--accent)}
-.stat .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+/* STATS GRID */
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px}
+.stat .n{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;color:var(--accent)}
+.stat .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
 .stat.urgent .n{color:var(--error)}
 .stat.full{grid-column:1/-1}
 
+/* STATS CARDS */
+.stats-detail{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:12px}
+.scard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:11px;text-align:center}
+.scard .sn{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1}
+.scard .sl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+.scard.h .sn{color:var(--h)}
+.scard.m .sn{color:var(--m)}
+.scard.k .sn{color:var(--k)}
+.scard.fw .sn{color:var(--fw)}
+.scard.ap .sn{color:var(--ap)}
+
 /* ALERT */
-.alert-banner{background:linear-gradient(135deg,#2a0a0a,#1a0000);border:1px solid #7a1a1a;border-left:3px solid var(--error);border-radius:var(--r);padding:13px 15px;margin-bottom:14px;animation:pulseR 2.5s ease-in-out infinite}
+.alert-banner{background:linear-gradient(135deg,#2a0a0a,#1a0000);border:1px solid #7a1a1a;border-left:3px solid var(--error);border-radius:var(--r);padding:12px 14px;margin-bottom:12px;animation:pulseR 2.5s ease-in-out infinite}
+body.light .alert-banner{background:linear-gradient(135deg,#fff0f0,#fff5f5)}
 @keyframes pulseR{0%,100%{border-left-color:#ff4d4d}50%{border-left-color:#ff9999}}
-.alert-title{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--error);letter-spacing:1px;display:flex;align-items:center;gap:6px;margin-bottom:8px}
-.alert-chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip-err{background:rgba(255,77,77,.14);border:1px solid rgba(255,77,77,.3);border-radius:100px;padding:3px 10px;font-family:'DM Mono',monospace;font-size:11.5px;color:#ff9999}
+.alert-title{font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--error);letter-spacing:1px;display:flex;align-items:center;gap:6px;margin-bottom:7px}
+.alert-chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip-err{background:rgba(255,77,77,.14);border:1px solid rgba(255,77,77,.3);border-radius:100px;padding:2px 9px;font-family:'DM Mono',monospace;font-size:11px;color:#ff9999}
 
 /* FILTER PILLS */
-.fpills{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.fpill{padding:6px 12px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s}
+.fpills{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.fpill{padding:5px 11px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s}
 .fpill.active{background:var(--surface2);color:var(--text);border-color:var(--dim)}
 .fpill[data-f="Hombre"].active{border-color:var(--h);color:var(--h)}
 .fpill[data-f="Mujer"].active{border-color:var(--m);color:var(--m)}
 .fpill[data-f="Kids"].active{border-color:var(--k);color:var(--k)}
+.fpill[data-f="Footwear"].active{border-color:var(--fw);color:var(--fw)}
+.fpill[data-f="Apparel"].active{border-color:var(--ap);color:var(--ap)}
+
+/* DATE FILTER */
+.date-filter{display:flex;gap:7px;margin-bottom:10px;align-items:center}
+.date-filter input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 10px;outline:none}
+.date-filter input:focus{border-color:var(--accent)}
+.btn-clear-date{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:7px;padding:7px 10px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.btn-clear-date:hover{border-color:var(--error);color:var(--error)}
 
 /* SEARCH */
-.sbar{position:relative;margin-bottom:12px}
+.sbar{position:relative;margin-bottom:10px}
 .sbar input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 13px 10px 36px;outline:none;transition:border-color .2s}
 .sbar input:focus{border-color:var(--accent)}
 .sbar svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--dim);pointer-events:none}
 
 /* REFRESH BTN */
-.btn-ref{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:11px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:14px}
+.btn-ref{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:10px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:12px}
 .btn-ref:hover{border-color:var(--accent);color:var(--accent)}
 .btn-ref svg{width:14px;height:14px;transition:transform .4s}
 .btn-ref.loading svg{animation:spin .6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* RECORDS */
-.rlist{display:flex;flex-direction:column;gap:9px}
-.rec{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;animation:sIn .22s ease}
+.rlist{display:flex;flex-direction:column;gap:8px}
+.rec{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;animation:sIn .22s ease}
 @keyframes sIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.rec.overdue{border-color:rgba(255,77,77,.4);background:linear-gradient(135deg,#1a0a0a,#181818)}
-.rec.warning{border-color:rgba(255,180,0,.35);background:linear-gradient(135deg,#1a1200,#181818)}
-.rec-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-.rec-num{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent);letter-spacing:1px;line-height:1}
-.rec-right{display:flex;align-items:center;gap:6px}
-.ctag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;letter-spacing:.4px}
+.rec.overdue{border-color:rgba(255,77,77,.4);background:linear-gradient(135deg,#1a0a0a,var(--surface))}
+.rec.warning{border-color:rgba(255,180,0,.35);background:linear-gradient(135deg,#1a1200,var(--surface))}
+body.light .rec.overdue{background:linear-gradient(135deg,#fff0f0,#fff)}
+body.light .rec.warning{background:linear-gradient(135deg,#fffbf0,#fff)}
+.rec-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.rec-num{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:1px;line-height:1}
+body.light .rec-num{color:var(--h)}
+.rec-right{display:flex;align-items:center;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.ctag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;letter-spacing:.4px}
 .ctag.Hombre{background:rgba(96,165,250,.15);color:var(--h)}
 .ctag.Mujer{background:rgba(244,114,182,.15);color:var(--m)}
 .ctag.Kids{background:rgba(52,211,153,.15);color:var(--k)}
-.dbadge{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;padding:2px 8px;border-radius:100px}
+.ztag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;letter-spacing:.3px}
+.ztag.Footwear{background:rgba(96,165,250,.18);color:var(--fw);border:1px solid rgba(96,165,250,.3)}
+.ztag.Apparel{background:rgba(251,191,36,.18);color:var(--ap);border:1px solid rgba(251,191,36,.3)}
+.dbadge{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;padding:2px 7px;border-radius:100px}
 .dbadge.ok{background:rgba(62,255,160,.12);color:var(--ok)}
 .dbadge.warn{background:rgba(255,180,0,.15);color:var(--warn)}
 .dbadge.over{background:rgba(255,77,77,.18);color:var(--error);font-weight:700}
-.rec-ref{font-size:14px;font-weight:600;margin-bottom:5px}
+.rec-ref{font-size:13px;font-weight:600;margin-bottom:4px}
 .rec-meta{display:flex;justify-content:space-between;align-items:center}
-.rec-who{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px}
+.rec-who{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:3px}
 .rec-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim)}
 
 /* MODELS */
-.mgrid{display:flex;flex-direction:column;gap:9px}
-.mitem{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mgrid{display:flex;flex-direction:column;gap:8px}
+.mitem{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .minfo{flex:1;min-width:0}
-.mname{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.btn-del{background:rgba(255,77,77,.1);border:1px solid rgba(255,77,77,.25);color:var(--error);border-radius:7px;padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s}
+.mname{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn-del{background:rgba(255,77,77,.1);border:1px solid rgba(255,77,77,.25);color:var(--error);border-radius:7px;padding:6px 11px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s}
 .btn-del:hover{background:rgba(255,77,77,.22)}
 
 /* SKELETON */
-.skel{background:var(--surface);border-radius:var(--r);height:78px;animation:pulse 1.4s ease-in-out infinite;margin-bottom:9px}
+.skel{background:var(--surface);border-radius:var(--r);height:75px;animation:pulse 1.4s ease-in-out infinite;margin-bottom:8px}
 @keyframes pulse{0%,100%{opacity:.4}50%{opacity:.8}}
 
 /* MODAL */
 #modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:500;align-items:flex-end;justify-content:center;padding:20px}
 #modal-ov.open{display:flex}
-#modal-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;width:100%;max-width:400px}
+#modal-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;width:100%;max-width:400px}
 #modal-box h3{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--error);margin-bottom:8px}
-#modal-box p{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:18px}
+#modal-box p{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:16px}
 .modal-btns{display:flex;gap:8px}
 .modal-btns button{flex:1;padding:12px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none}
 #mb-cancel{background:var(--surface2);color:var(--text)}
 #mb-confirm{background:var(--error);color:#fff}
 
 /* EMPTY & TOAST */
-.empty{text-align:center;padding:36px 20px;color:var(--dim)}
-.empty svg{width:34px;height:34px;margin-bottom:10px;opacity:.3}
+.empty{text-align:center;padding:32px 20px;color:var(--dim)}
+.empty svg{width:32px;height:32px;margin-bottom:10px;opacity:.3}
 .empty p{font-size:13px}
 #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ok);color:#000;font-weight:700;font-size:13px;padding:11px 22px;border-radius:100px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);z-index:999;white-space:nowrap;pointer-events:none}
 #toast.show{transform:translateX(-50%) translateY(0)}
@@ -174,17 +216,10 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
     <h1>MUESTRAS</h1>
     <p>Control de cambios · Tienda</p>
   </div>
+  <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Cambiar modo">🌙</button>
 </header>
 
-<div id="cfg">
-  <h3>⚙ CONFIGURACIÓN</h3>
-  <p>ID del Google Sheet (en la URL entre <code>/d/</code> y <code>/edit</code>) y nombre de la hoja.</p>
-  <div class="cfg-row">
-    <input type="text" id="cfg-id"   placeholder="ID del Google Sheet..." />
-    <input type="text" id="cfg-name" placeholder="Nombre hoja (ej: Muestras)" value="Muestras" />
-    <button class="btn-cfg" onclick="saveConfig()">Guardar</button>
-  </div>
-</div>
+<div id="cfg"></div>
 
 <div class="tabs">
   <button class="tab active" onclick="switchTab('form',this)">
@@ -198,6 +233,10 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
   <button class="tab" onclick="switchTab('models',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
     Modelos
+  </button>
+  <button class="tab" onclick="switchTab('stats',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Stats
   </button>
 </div>
 
@@ -215,6 +254,14 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
       </div>
     </div>
 
+    <div class="field">
+      <label>Zona</label>
+      <div class="zone-pills">
+        <button class="zpill active" data-zone="Footwear" onclick="selectZone(this)">🔵 Footwear</button>
+        <button class="zpill"        data-zone="Apparel"  onclick="selectZone(this)">🟡 Apparel</button>
+      </div>
+    </div>
+
     <div class="field field-num">
       <label>Nº Etiqueta</label>
       <input type="number" id="f-num" placeholder="001" inputmode="numeric" />
@@ -222,7 +269,10 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 
     <div class="field">
       <label>Modelo</label>
-      <select id="f-ref">
+      <input type="text" id="f-ref-search" placeholder="Buscar modelo..." autocomplete="off"
+        oninput="filterModelDropdown()"
+        style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px 8px 0 0;border-bottom:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:9px 12px;outline:none;transition:border-color .2s" />
+      <select id="f-ref" size="1" style="border-radius:0 0 8px 8px">
         <option value="">— Selecciona categoría primero —</option>
       </select>
     </div>
@@ -255,10 +305,18 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
   <div id="alert-div"></div>
 
   <div class="fpills">
-    <button class="fpill active" data-f="Todos"  onclick="setHFilter('Todos',this)">Todos</button>
-    <button class="fpill"        data-f="Hombre" onclick="setHFilter('Hombre',this)">👟 Hombre</button>
-    <button class="fpill"        data-f="Mujer"  onclick="setHFilter('Mujer',this)">👠 Mujer</button>
-    <button class="fpill"        data-f="Kids"   onclick="setHFilter('Kids',this)">🧒 Kids</button>
+    <button class="fpill active" data-f="Todos"    onclick="setHFilter('Todos',this)">Todos</button>
+    <button class="fpill"        data-f="Hombre"   onclick="setHFilter('Hombre',this)">👟 Hombre</button>
+    <button class="fpill"        data-f="Mujer"    onclick="setHFilter('Mujer',this)">👟 Mujer</button>
+    <button class="fpill"        data-f="Kids"     onclick="setHFilter('Kids',this)">🧒 Kids</button>
+    <button class="fpill"        data-f="Footwear" onclick="setHFilter('Footwear',this)">🔵 Footwear</button>
+    <button class="fpill"        data-f="Apparel"  onclick="setHFilter('Apparel',this)">🟡 Apparel</button>
+  </div>
+
+  <div class="date-filter">
+    <input type="date" id="date-from" onchange="applyFilters()" placeholder="Desde" title="Desde" />
+    <input type="date" id="date-to"   onchange="applyFilters()" placeholder="Hasta" title="Hasta" />
+    <button class="btn-clear-date" onclick="clearDates()">✕ Fechas</button>
   </div>
 
   <div class="sbar">
@@ -276,6 +334,36 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
       <p>Pulsa "Actualizar historial" para cargar los datos</p>
     </div>
+  </div>
+</div>
+
+<!-- ══ TAB STATS ══ -->
+<div id="tab-stats" class="section">
+  <div class="card">
+    <h2><span class="dot"></span>Por categoría</h2>
+    <div class="stats-detail">
+      <div class="scard h"><div class="sn" id="s-hombre">—</div><div class="sl">Hombre</div></div>
+      <div class="scard m"><div class="sn" id="s-mujer">—</div><div class="sl">Mujer</div></div>
+      <div class="scard k"><div class="sn" id="s-kids">—</div><div class="sl">Kids</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="dot"></span>Por zona</h2>
+    <div class="stats-detail" style="grid-template-columns:1fr 1fr">
+      <div class="scard fw"><div class="sn" id="s-fw">—</div><div class="sl">Footwear</div></div>
+      <div class="scard ap"><div class="sn" id="s-ap">—</div><div class="sl">Apparel</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="dot"></span>Top modelos cambiados</h2>
+    <div id="s-top-models"><div class="empty" style="padding:16px 0"><p>Carga el historial primero</p></div></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="dot"></span>Top empleados</h2>
+    <div id="s-top-who"><div class="empty" style="padding:16px 0"><p>Carga el historial primero</p></div></div>
   </div>
 </div>
 
@@ -303,18 +391,40 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
     <div class="fpills" id="mfpills">
       <button class="fpill active" data-f="Todos"  onclick="setMFilter('Todos',this)">Todos</button>
       <button class="fpill"        data-f="Hombre" onclick="setMFilter('Hombre',this)">👟 Hombre</button>
-      <button class="fpill"        data-f="Mujer"  onclick="setMFilter('Mujer',this)">👠 Mujer</button>
+      <button class="fpill"        data-f="Mujer"  onclick="setMFilter('Mujer',this)">👟 Mujer</button>
       <button class="fpill"        data-f="Kids"   onclick="setMFilter('Kids',this)">🧒 Kids</button>
     </div>
     <div id="models-list"></div>
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL CONFIRMACIÓN -->
+<div id="confirm-ov" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:500;align-items:flex-end;justify-content:center;padding:20px">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;width:100%;max-width:400px">
+    <h3 style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--accent);margin-bottom:12px">✓ Confirmar registro</h3>
+    <div id="confirm-body" style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:16px"></div>
+    <div style="display:flex;gap:8px">
+      <button onclick="closeConfirm()" style="flex:1;padding:12px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none;background:var(--surface2);color:var(--text)">Cancelar</button>
+      <button onclick="doSubmit()" style="flex:1;padding:12px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;cursor:pointer;border:none;background:var(--accent);color:#000">CONFIRMAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL URGENTES AL INICIO -->
+<div id="urgent-ov" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:600;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--surface);border:1px solid #7a1a1a;border-left:4px solid var(--error);border-radius:14px;padding:22px;width:100%;max-width:400px;animation:sIn .3s ease">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:var(--error);margin-bottom:4px">⚠ MUESTRAS URGENTES</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px">Las siguientes muestras llevan más de 15 días sin cambiar:</div>
+    <div id="urgent-list" style="display:flex;flex-direction:column;gap:7px;margin-bottom:18px;max-height:260px;overflow-y:auto"></div>
+    <button onclick="closeUrgent()" style="width:100%;padding:13px;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;cursor:pointer;border:none;background:var(--error);color:#fff">ENTENDIDO</button>
+  </div>
+</div>
+
+<!-- MODAL ELIMINAR -->
 <div id="modal-ov">
   <div id="modal-box">
     <h3>⚠ Eliminar modelo</h3>
-    <p id="modal-txt">¿Seguro? El historial existente no se verá afectado.</p>
+    <p id="modal-txt">¿Seguro? El historial no se verá afectado.</p>
     <div class="modal-btns">
       <button id="mb-cancel"  onclick="closeModal()">Cancelar</button>
       <button id="mb-confirm" onclick="confirmDel()">Eliminar</button>
@@ -325,64 +435,79 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 <div id="toast"></div>
 
 <script>
-// ══ STATE ══
-let CFG = {
+// ══ CONFIG ══
+const CFG = {
   sheetId:   '1hb9SKGbWpI8xJKP1TGQ0ac3kVlBvCi8jmI6bbxrVM2s',
   sheetName: 'Muestras',
-  scriptUrl: 'https://script.google.com/macros/s/AKfycbzzvi4YaaEbYFGbpm-HszhVzX5gMlJU-PanVbUPUzHwUDTSUssP-GHDXJxXTylKGgMvpQ/exec'
+  scriptUrl: 'https://script.google.com/macros/s/AKfycbyNqcrhtHoifn1gfQOdLmLG-9FlZQ3Dxs0SbubnoO-jdUoK0XdcdikWs5mvHa0IVNAJtQ/exec'
 };
-const DEFAULT_MODELS = [{"name":"AIR FORCE 1 RETRO (HV2021-200)","cat":"Hombre"},{"name":"AIR MAX COMMAND (629993-020)","cat":"Hombre"},{"name":"AIR MAX DN (IB3078-010)","cat":"Hombre"},{"name":"AIR MAX DN8 LTR SP (II7058-200)","cat":"Hombre"},{"name":"AIR MAX DN8 SE (HV4525-400)","cat":"Hombre"},{"name":"AIR MAX TORCH 4 (343846-012)","cat":"Hombre"},{"name":"AIR WINFLO 10 (DV4022-002)","cat":"Hombre"},{"name":"AIR WINFLO 10 (DV4022-007)","cat":"Hombre"},{"name":"AIR ZOOM SPIRIDON (HM8497-010)","cat":"Hombre"},{"name":"GIANNIS FREAK 7 SE (IM5839-001)","cat":"Hombre"},{"name":"JORDAN COURTSIDE 2 (AR1000-023)","cat":"Hombre"},{"name":"JORDAN COURTSIDE 2 (AR1000-100)","cat":"Hombre"},{"name":"JORDAN STADIUM 90 (HF5258-002)","cat":"Hombre"},{"name":"JORDAN STADIUM 90 (HF5258-102)","cat":"Hombre"},{"name":"LEBRON WITNESS IX (HQ8034-400)","cat":"Hombre"},{"name":"LEGEND 10 ACADEMY (DV4337-402)","cat":"Hombre"},{"name":"LEGEND 10 ACADEMY (DV4337-800)","cat":"Hombre"},{"name":"LEGEND 10 ACADEMY (DV4338-002)","cat":"Hombre"},{"name":"M AIR MAX ALPHA TR (FQ1833-003)","cat":"Hombre"},{"name":"M NIKE AIR MAX ALP (DM0829-003)","cat":"Hombre"},{"name":"M NIKE AIR MAX ALP (DM0829-010)","cat":"Hombre"},{"name":"NIKE AIR MAX 1 '86 (FV7477-002)","cat":"Hombre"},{"name":"NIKE AIR ZOOM PEGA (DH4071-001)","cat":"Hombre"},{"name":"NIKE AIR ZOOM PEGA (DH4071-002)","cat":"Hombre"},{"name":"NIKE AIR ZOOM PEGA (DH4071-007)","cat":"Hombre"},{"name":"NIKE AIR ZOOM VOME (DA7245-011)","cat":"Hombre"},{"name":"NIKE DOWNSHIFTER 1 (DD9293-001)","cat":"Hombre"},{"name":"NIKE DOWNSHIFTER 1 (DD9293-004)","cat":"Hombre"},{"name":"NIKE EBERNON LOW (AQ1775-003)","cat":"Hombre"},{"name":"NIKE EBERNON LOW (AQ1775-100)","cat":"Hombre"},{"name":"NIKE EBERNON LOW P (AQ1774-102)","cat":"Hombre"},{"name":"NIKE FIELD GENERAL (HF3165-001)","cat":"Hombre"},{"name":"NIKE GATO SE (IH3370-010)","cat":"Hombre"},{"name":"NIKE JUNIPER TRAIL (DM0822-006)","cat":"Hombre"},{"name":"NIKE JUNIPER TRAIL (DM0822-200)","cat":"Hombre"},{"name":"NIKE LUNAR ROAM (DV2440-002)","cat":"Hombre"},{"name":"NIKE REVOLUTION 7 (FB2207-001)","cat":"Hombre"},{"name":"NIKE REVOLUTION 7 (FB2207-100)","cat":"Hombre"},{"name":"NIKE REVOLUTION 7 (FB2207-400)","cat":"Hombre"},{"name":"NIKE RUN SWIFT 2 (CU3517-002)","cat":"Hombre"},{"name":"NIKE RUN SWIFT 2 (CU3517-006)","cat":"Hombre"},{"name":"NIKE ZOOM VOMERO 5 (FJ4151-007)","cat":"Hombre"},{"name":"PHANTOM 6 LOW ACD (HQ2321-400)","cat":"Hombre"},{"name":"PHANTOM GX II ACAD (FD6723-300)","cat":"Hombre"},{"name":"PHANTOM LUNA II AC (FD6725-300)","cat":"Hombre"},{"name":"REACT PEGASUS TRAI (HM9728-002)","cat":"Hombre"},{"name":"TOTAL 90 (HQ2851-401)","cat":"Hombre"},{"name":"ZM SUPERFLY 10 ACA (FQ1456-600)","cat":"Hombre"},{"name":"ZM VAPOR 16 PRO FG (FQ8685-600)","cat":"Hombre"},{"name":"ZOOM VAPOR 15 ACAD (DJ5630-001)","cat":"Hombre"},{"name":"ZOOM VAPOR 15 ACAD (DJ5630-300)","cat":"Hombre"},{"name":"AIR FORCE 1 (GS) (FV5948-101)","cat":"Kids"},{"name":"AIR MAX DN8 (GS) (HF7310-400)","cat":"Kids"},{"name":"FLEX RUNNER 3 (PS) (FN1449-002)","cat":"Kids"},{"name":"JR LEGEND 10 ACADE (DV4348-002)","cat":"Kids"},{"name":"JR ZM SUPERFLY 10 (HF3417-801)","cat":"Kids"},{"name":"JR ZM VAPOR 16 PRO (HF5448-700)","cat":"Kids"},{"name":"NIKE AIR MAX INVIG (749572-017)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (870026-100)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (BQ5448-001)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (BQ5448-100)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (BQ5451-001)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (BQ5451-100)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (BQ5451-108)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (BQ5453-001)","cat":"Kids"},{"name":"NIKE COURT BOROUGH (BQ5453-100)","cat":"Kids"},{"name":"NIKE COURT ROYALE (833536-002)","cat":"Kids"},{"name":"NIKE FLEX RUNNER 2 (DJ6039-002)","cat":"Kids"},{"name":"NIKE KILLSHOT 2 (G (IF0500-001)","cat":"Kids"},{"name":"NIKE STAR RUNNER 4 (DX7614-002)","cat":"Kids"},{"name":"NIKE STAR RUNNER 4 (DX7614-602)","cat":"Kids"},{"name":"NIKE STAR RUNNER 4 (DX7615-001)","cat":"Kids"},{"name":"NIKE STAR RUNNER 4 (DX7615-002)","cat":"Kids"},{"name":"W AIR MAX DN8 (HF5509-001)","cat":"Mujer"},{"name":"W AIR MAX DN8 (HF5509-400)","cat":"Mujer"},{"name":"W AIR MAX DN8 (HF5509-601)","cat":"Mujer"},{"name":"W AIR MAX MUSE - R (IB2221-001)","cat":"Mujer"},{"name":"W AIR MAX MUSE - R (IB2221-002)","cat":"Mujer"},{"name":"W AIR WINFLO 10 (DV4023-003)","cat":"Mujer"},{"name":"W AIR WINFLO 10 (DV4023-010)","cat":"Mujer"},{"name":"W AIR WINFLO 10 (HF0738-101)","cat":"Mujer"},{"name":"W NIKE DOWNSHIFTER (DD9294-002)","cat":"Mujer"},{"name":"W NIKE DOWNSHIFTER (DD9294-008)","cat":"Mujer"},{"name":"W NIKE DOWNSHIFTER (DD9294-600)","cat":"Mujer"},{"name":"W NIKE DUNK LOW NE (DD1873-102)","cat":"Mujer"},{"name":"W NIKE FREE METCON (DV3950-001)","cat":"Mujer"},{"name":"W NIKE FREE METCON (DV3950-100)","cat":"Mujer"},{"name":"W NIKE FREE METCON (DV3950-200)","cat":"Mujer"},{"name":"W NIKE FREE METCON (DV3950-500)","cat":"Mujer"},{"name":"W NIKE INTERACT RU (FZ3742-133)","cat":"Mujer"},{"name":"W NIKE M2K TEKNO (BQ3378-100)","cat":"Mujer"},{"name":"W NIKE M2K TEKNO E (CJ9583-100)","cat":"Mujer"},{"name":"W NIKE MC TRAINER (DM0824-104)","cat":"Mujer"},{"name":"W NIKE MC TRAINER (DM0824-105)","cat":"Mujer"},{"name":"W NIKE REACT PEGAS (DJ6159-200)","cat":"Mujer"},{"name":"W NIKE REACT PEGAS (FZ3778-072)","cat":"Mujer"},{"name":"W NIKE REVOLUTION (FB2208-604)","cat":"Mujer"},{"name":"W NIKE VERSAIR (DZ3547-100)","cat":"Mujer"},{"name":"W NIKE ZOOM BELLA (DR5720-001)","cat":"Mujer"},{"name":"W NIKE ZOOM BELLA (DR5720-100)","cat":"Mujer"},{"name":"W NIKE ZOOM BELLA (DR5720-105)","cat":"Mujer"},{"name":"WMNS AIR MAX COMMA (397690-169)","cat":"Mujer"},{"name":"WMNS AIR MAX COMMA (718896-228)","cat":"Mujer"},{"name":"WMNS NIKE AIR HEIG (CI0603-102)","cat":"Mujer"},{"name":"WMNS NIKE AIR MAX (CU4152-100)","cat":"Mujer"},{"name":"WMNS NIKE AIR WINF (DR9831-001)","cat":"Mujer"},{"name":"WMNS NIKE AIR ZOOM (DH4072-001)","cat":"Mujer"},{"name":"WMNS NIKE AIR ZOOM (DH4072-003)","cat":"Mujer"},{"name":"WMNS NIKE COURT RO (749867-105)","cat":"Mujer"},{"name":"WMNS NIKE JUNIPER (DM0821-104)","cat":"Mujer"},{"name":"WMNS NIKE MOTIVA (DV1238-001)","cat":"Mujer"},{"name":"WMNS NIKE QUEST 5 (DD9291-601)","cat":"Mujer"},{"name":"WMNS NIKE ZOOM SPA (CQ9267-004)","cat":"Mujer"},{"name":"WMNS NIKE ZOOM SPA (CQ9267-008)","cat":"Mujer"}];
 
-// Control de versión: si cambia, resetea modelos automáticamente
-const APP_VERSION = '3';
+const APP_VERSION = '4';
 if (localStorage.getItem('ms_version') !== APP_VERSION) {
-  localStorage.setItem('ms_models', JSON.stringify(DEFAULT_MODELS));
+  localStorage.removeItem('ms_models');
   localStorage.setItem('ms_version', APP_VERSION);
 }
-let MODELS = JSON.parse(localStorage.getItem('ms_models'));
-let allRecs  = [];
-let selCat   = '';
-let selectedModelCat  = '';
-let hFilter  = 'Todos';
-let mFilter  = 'Todos';
-let pendDel  = null;
+
+let MODELS  = [];
+let allRecs = [];
+let selCat  = '';
+let selZone = 'Footwear';
+let selectedModelCat = '';
+let hFilter = 'Todos';
+let mFilter = 'Todos';
+let pendDel = null;
 
 const OVERDUE = 15, WARN = 10;
 
 // ══ INIT ══
 window.onload = () => {
   updateClock(); setInterval(updateClock, 1000);
-  if (CFG.sheetId) {
-    document.getElementById('cfg-id').value   = CFG.sheetId;
-    document.getElementById('cfg-name').value = CFG.sheetName;
-    document.getElementById('cfg').style.borderLeftColor = '#3effa0';
-  }
+
+  // Theme
+  const saved = localStorage.getItem('ms_theme');
+  if (saved === 'light') applyTheme('light');
+
+  // Remember name
   const lw = localStorage.getItem('ms_lastWho');
   if (lw) document.getElementById('f-who').value = lw;
+
   loadModels();
+  checkUrgentOnLoad();
 };
+
+// ══ CATEGORY & ZONE ══
+function selectCat(btn) {
+  document.querySelectorAll('#tab-form .cpill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selCat = btn.dataset.cat;
+  populateDrop();
+}
+function selectZone(btn) {
+  document.querySelectorAll('.zpill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selZone = btn.dataset.zone;
+}
 
 function updateClock() {
   document.getElementById('dt-text').textContent =
     new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'});
 }
 
-// ══ CONFIG ══
-function saveConfig() {
-  const id   = document.getElementById('cfg-id').value.trim();
-  const name = document.getElementById('cfg-name').value.trim() || 'Muestras';
-  if (!id) { toast('Introduce el ID del Sheet',true); return; }
-  CFG.sheetId = id; CFG.sheetName = name;
-  localStorage.setItem('ms_sheetId', id);
-  localStorage.setItem('ms_sheetName', name);
-  toast('Configuración guardada ✓');
-  document.getElementById('cfg').style.borderLeftColor = '#3effa0';
+// ══ THEME ══
+function toggleTheme() {
+  const isLight = document.body.classList.contains('light');
+  applyTheme(isLight ? 'dark' : 'light');
 }
-// Llama desde consola: saveScriptUrl('https://...')
-function saveScriptUrl(url) {
-  localStorage.setItem('ms_scriptUrl', url);
-  CFG.scriptUrl = url;
-  toast('Script URL guardado ✓');
+function applyTheme(t) {
+  if (t === 'light') {
+    document.body.classList.add('light');
+    document.getElementById('theme-btn').textContent = '☀️';
+    localStorage.setItem('ms_theme','light');
+  } else {
+    document.body.classList.remove('light');
+    document.getElementById('theme-btn').textContent = '🌙';
+    localStorage.setItem('ms_theme','dark');
+  }
 }
 
 // ══ TABS ══
@@ -393,53 +518,124 @@ function switchTab(t, btn) {
   btn.classList.add('active');
   if (t === 'history' && allRecs.length === 0) loadHistory();
   if (t === 'models') loadModels();
+  if (t === 'stats') renderStats();
 }
 
-// ══ CATEGORY (FORM) ══
-function selectCat(btn) {
-  document.querySelectorAll('#tab-form .cpill').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  selCat = btn.dataset.cat;
-  populateDrop();
-}
+// ══ MODEL SEARCH + SELECT ══
+let allCatModels = [];
+
 function populateDrop() {
-  const sel = document.getElementById('f-ref');
-  const list = MODELS.filter(m => m.cat === selCat);
-  sel.innerHTML = list.length
-    ? `<option value="">— Selecciona modelo —</option>` + list.map(m=>`<option value="${m.name}">${m.name}</option>`).join('')
-    : `<option value="">— Sin modelos en ${selCat} —</option>`;
+  allCatModels = MODELS.filter(m => m.cat === selCat);
+  document.getElementById('f-ref-search').value = '';
+  document.getElementById('f-ref-search').placeholder = selCat ? `Buscar en ${selCat}...` : 'Selecciona categoría primero';
+  renderSelect(allCatModels);
 }
 
-// ══ SUBMIT ══
-async function submitRecord() {
-  const num = document.getElementById('f-num').value.trim();
-  const ref = document.getElementById('f-ref').value.trim();
-  const who = document.getElementById('f-who').value.trim();
-  if (!selCat) { toast('Selecciona una categoría',true); return; }
-  if (!num)    { toast('Introduce el nº de etiqueta',true); return; }
-  if (!ref)    { toast('Selecciona un modelo',true); return; }
-  if (!who)    { toast('Introduce tu nombre',true); return; }
-  if (!CFG.sheetId)   { toast('Configura el Google Sheet primero',true); return; }
-  if (!CFG.scriptUrl) { toast('Falta Script URL — escribe en consola: saveScriptUrl("URL")',true); return; }
+function filterModelDropdown() {
+  const q = document.getElementById('f-ref-search').value.toLowerCase();
+  const list = allCatModels.filter(m => m.name.toLowerCase().includes(q));
+  renderSelect(list);
+}
+
+function renderSelect(list) {
+  const sel = document.getElementById('f-ref');
+  if (!list.length) {
+    sel.innerHTML = `<option value="">— Sin resultados —</option>`;
+  } else {
+    sel.innerHTML = `<option value="">— Selecciona modelo —</option>` +
+      list.map(m => `<option value="${m.name}">${m.name}</option>`).join('');
+  }
+}
+
+// ══ CONFIRM MODAL ══
+let pendingSubmitData = null;
+
+function submitRecord() {
+  const num  = document.getElementById('f-num').value.trim();
+  const ref  = document.getElementById('f-ref').value.trim();
+  const who  = document.getElementById('f-who').value.trim();
+  if (!selCat)  { toast('Selecciona una categoría',true); return; }
+  if (!selZone) { toast('Selecciona una zona',true); return; }
+  if (!num)     { toast('Introduce el nº de etiqueta',true); return; }
+  if (!ref)     { toast('Selecciona un modelo',true); return; }
+  if (!who)     { toast('Introduce tu nombre',true); return; }
+
+  pendingSubmitData = { num, ref, who, cat: selCat, zona: selZone };
+
+  document.getElementById('confirm-body').innerHTML =
+    `<div style="display:grid;gap:6px">
+      <div><span style="color:var(--dim)">Categoría</span> &nbsp;<strong>${selCat}</strong></div>
+      <div><span style="color:var(--dim)">Zona</span> &nbsp;<strong style="color:${selZone==='Footwear'?'var(--fw)':'var(--ap)'}">${selZone}</strong></div>
+      <div><span style="color:var(--dim)">Nº Etiqueta</span> &nbsp;<strong style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--h)">#${String(num).padStart(3,'0')}</strong></div>
+      <div><span style="color:var(--dim)">Modelo</span> &nbsp;<strong>${ref}</strong></div>
+      <div><span style="color:var(--dim)">Quién</span> &nbsp;<strong>${who}</strong></div>
+    </div>`;
+
+  document.getElementById('confirm-ov').style.display = 'flex';
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-ov').style.display = 'none';
+  pendingSubmitData = null;
+}
+
+async function doSubmit() {
+  closeConfirm();
+  if (!pendingSubmitData) return;
+  const { num, ref, who, cat, zona } = pendingSubmitData;
 
   const btn = document.getElementById('btn-submit');
   btn.disabled = true; btn.textContent = 'Enviando...';
   const fecha = new Date().toLocaleString('es-ES');
   try {
-    const p = new URLSearchParams({num,ref,who,cat:selCat,fecha,sheetId:CFG.sheetId,sheetName:CFG.sheetName});
+    const p = new URLSearchParams({num,ref,who,cat,zona,fecha,sheetId:CFG.sheetId,sheetName:CFG.sheetName});
     await fetch(CFG.scriptUrl+'?'+p.toString(),{method:'GET',mode:'no-cors'});
-    allRecs.unshift({num,ref,who,cat:selCat,fecha});
-    localStorage.setItem('ms_lastWho',who);
+    allRecs.unshift({num,ref,who,cat,zona,fecha});
+    localStorage.setItem('ms_lastWho', who);
     toast('✓ Cambio registrado');
     document.getElementById('f-num').value = '';
+    document.getElementById('f-ref-search').value = '';
     document.getElementById('f-ref').value = '';
   } catch(e) { toast('Error de conexión',true); }
   btn.disabled = false; btn.textContent = '✓ REGISTRAR CAMBIO';
+  pendingSubmitData = null;
+}
+
+// ══ URGENT ALERT ON LOAD ══
+async function checkUrgentOnLoad() {
+  try {
+    const p = new URLSearchParams({action:'read',sheetId:CFG.sheetId,sheetName:CFG.sheetName});
+    const res  = await fetch(CFG.scriptUrl+'?'+p.toString());
+    const data = await res.json();
+    allRecs = data.records || [];
+    updateStats();
+    renderStats();
+
+    const latest  = latestPerSample(allRecs);
+    const overdue = latest.filter(r=>{ const d=daysAgo(r.fecha); return d!==null&&d>=OVERDUE; });
+
+    if (overdue.length > 0) {
+      document.getElementById('urgent-list').innerHTML = overdue.map(r=>`
+        <div style="background:rgba(255,77,77,.1);border:1px solid rgba(255,77,77,.25);border-radius:8px;padding:10px 13px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--error)">#${String(r.num).padStart(3,'0')}</span>
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--error);font-weight:700">${daysAgo(r.fecha)} días</span>
+          </div>
+          <div style="font-size:12px;font-weight:600;color:var(--text)">${r.ref||'—'}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">${r.cat||''}${r.zona?' · '+r.zona:''}</div>
+        </div>`).join('');
+      document.getElementById('urgent-ov').style.display = 'flex';
+    }
+  } catch(e) { /* silent fail */ }
+}
+
+function closeUrgent() {
+  document.getElementById('urgent-ov').style.display = 'none';
 }
 
 // ══ HISTORY ══
 async function loadHistory() {
-  if (!CFG.scriptUrl || !CFG.sheetId) { toast('Configura Sheet y Script URL primero',true); return; }
+  if (!CFG.scriptUrl || !CFG.sheetId) { toast('Sin configuración',true); return; }
   const btn = document.getElementById('btn-ref');
   btn.classList.add('loading');
   const c = document.getElementById('rec-container');
@@ -451,31 +647,57 @@ async function loadHistory() {
     allRecs = data.records || [];
     applyFilters();
     updateStats();
+    renderStats();
   } catch(e) {
     c.innerHTML = '<div class="empty"><p>Error cargando datos. Revisa la configuración.</p></div>';
   }
   btn.classList.remove('loading');
 }
 
+// ── Active filter state ──
+let activeHFilter = 'Todos';
 function setHFilter(f, btn) {
-  hFilter = f;
-  document.querySelectorAll('#tab-history .fpill').forEach(b=>b.classList.remove('active'));
+  activeHFilter = f;
+  document.querySelectorAll('#tab-history .fpill').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   applyFilters();
 }
+
+function clearDates() {
+  document.getElementById('date-from').value = '';
+  document.getElementById('date-to').value = '';
+  applyFilters();
+}
+
 function applyFilters() {
-  const q = (document.getElementById('search-in').value||'').toLowerCase();
+  const q      = (document.getElementById('search-in').value||'').toLowerCase();
+  const dFrom  = document.getElementById('date-from').value;
+  const dTo    = document.getElementById('date-to').value;
+
   let list = allRecs;
-  if (hFilter !== 'Todos') list = list.filter(r => r.cat === hFilter);
+
+  // Category/zone filter
+  if (activeHFilter === 'Hombre' || activeHFilter === 'Mujer' || activeHFilter === 'Kids') {
+    list = list.filter(r => r.cat === activeHFilter);
+  } else if (activeHFilter === 'Footwear' || activeHFilter === 'Apparel') {
+    list = list.filter(r => r.zona === activeHFilter);
+  }
+
+  // Date filter
+  if (dFrom) list = list.filter(r => { const d = parseFecha(r.fecha); return d && d >= new Date(dFrom); });
+  if (dTo)   list = list.filter(r => { const d = parseFecha(r.fecha); return d && d <= new Date(dTo + 'T23:59:59'); });
+
+  // Search
   if (q) list = list.filter(r =>
-    String(r.num).includes(q)||
-    (r.ref||'').toLowerCase().includes(q)||
+    String(r.num).includes(q) ||
+    (r.ref||'').toLowerCase().includes(q) ||
     (r.who||'').toLowerCase().includes(q)
   );
+
   renderRecs(list);
 }
 
-// ── days ──
+// ── Days logic ──
 function parseFecha(s) {
   if (!s) return null;
   const [dp] = s.split(',');
@@ -508,11 +730,13 @@ function renderRecs(recs) {
     else if(d>=OVERDUE){bc='over';bt=`${d}d ⚠`;cc='overdue';ic='🔴 ';}
     else if(d>=WARN){bc='warn';bt=`${d}d`;cc='warning';ic='🟡 ';}
     else{bt=d===0?'Hoy':d===1?'1d':`${d}d`;}
+    const zona = r.zona || '';
     return `<div class="rec ${cc}">
       <div class="rec-top">
         <div class="rec-num">${ic}#${String(r.num).padStart(3,'0')}</div>
         <div class="rec-right">
           ${r.cat?`<span class="ctag ${r.cat}">${r.cat}</span>`:''}
+          ${zona?`<span class="ztag ${zona}">${zona}</span>`:''}
           <span class="dbadge ${bc}">${bt}</span>
         </div>
       </div>
@@ -529,16 +753,14 @@ function updateStats() {
   document.getElementById('st-total').textContent = allRecs.length;
   const today = new Date().toLocaleDateString('es-ES');
   document.getElementById('st-today').textContent = allRecs.filter(r=>(r.fecha||'').includes(today)).length;
-
   const latest  = latestPerSample(allRecs);
   const overdue = latest.filter(r=>{ const d=daysAgo(r.fecha); return d!==null&&d>=OVERDUE; });
   const adiv    = document.getElementById('alert-div');
   const scard   = document.getElementById('st-overdue-card');
-
   if (overdue.length) {
     scard.style.display='block';
     document.getElementById('st-overdue').textContent = overdue.length;
-    const chips = overdue.map(r=>`<span class="chip-err">#${String(r.num).padStart(3,'0')} · ${daysAgo(r.fecha)}d${r.cat?' · '+r.cat:''}</span>`).join('');
+    const chips = overdue.map(r=>`<span class="chip-err">#${String(r.num).padStart(3,'0')} · ${daysAgo(r.fecha)}d${r.cat?' · '+r.cat:''}${r.zona?' · '+r.zona:''}</span>`).join('');
     adiv.innerHTML=`<div class="alert-banner"><div class="alert-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>${overdue.length} MUESTRA${overdue.length>1?'S':''} SIN CAMBIAR (+15 DÍAS)</div><div class="alert-chips">${chips}</div></div>`;
   } else {
     scard.style.display='none';
@@ -546,7 +768,46 @@ function updateStats() {
   }
 }
 
-// ══ MODELS — sincronizados con Google Sheet ══
+// ══ STATS TAB ══
+function renderStats() {
+  if (!allRecs.length) return;
+
+  // By category
+  const cnt = (key, val) => allRecs.filter(r=>r[key]===val).length;
+  document.getElementById('s-hombre').textContent = cnt('cat','Hombre');
+  document.getElementById('s-mujer').textContent  = cnt('cat','Mujer');
+  document.getElementById('s-kids').textContent   = cnt('cat','Kids');
+  document.getElementById('s-fw').textContent     = allRecs.filter(r=>!r.zona||r.zona==='Footwear').length;
+  document.getElementById('s-ap').textContent     = cnt('zona','Apparel');
+
+  // Top models
+  const modelCount = {};
+  allRecs.forEach(r=>{ if(r.ref) modelCount[r.ref]=(modelCount[r.ref]||0)+1; });
+  const topModels = Object.entries(modelCount).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  document.getElementById('s-top-models').innerHTML = topModels.length ?
+    topModels.map(([name,n],i)=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--accent);width:20px">${i+1}</span>
+        <span style="flex:1;font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</span>
+        <span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)">${n}x</span>
+      </div>`).join('') :
+    '<div class="empty" style="padding:12px 0"><p>Sin datos</p></div>';
+
+  // Top employees
+  const whoCount = {};
+  allRecs.forEach(r=>{ if(r.who) whoCount[r.who]=(whoCount[r.who]||0)+1; });
+  const topWho = Object.entries(whoCount).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  document.getElementById('s-top-who').innerHTML = topWho.length ?
+    topWho.map(([name,n],i)=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--accent);width:20px">${i+1}</span>
+        <span style="flex:1;font-size:13px;font-weight:600">${name}</span>
+        <span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)">${n} cambios</span>
+      </div>`).join('') :
+    '<div class="empty" style="padding:12px 0"><p>Sin datos</p></div>';
+}
+
+// ══ MODELS ══
 function pickModelCat(btn) {
   document.querySelectorAll('#tab-models .cpill').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
@@ -555,7 +816,7 @@ function pickModelCat(btn) {
 
 async function loadModels() {
   const el = document.getElementById('models-list');
-  el.innerHTML='<div class="skeleton"></div><div class="skeleton"></div>';
+  if (el) el.innerHTML='<div class="skel"></div><div class="skel"></div>';
   try {
     const res  = await fetch(CFG.scriptUrl+'?action=readModels');
     const data = await res.json();
@@ -563,7 +824,7 @@ async function loadModels() {
     renderModels();
     populateDrop();
   } catch(e) {
-    el.innerHTML='<div class="empty"><p>Error cargando modelos.</p></div>';
+    if (el) el.innerHTML='<div class="empty"><p>Error cargando modelos.</p></div>';
   }
 }
 
@@ -571,24 +832,20 @@ async function addModel() {
   const name = document.getElementById('m-name').value.trim();
   if (!selectedModelCat) { toast('Selecciona categoría',true); return; }
   if (!name) { toast('Introduce el nombre del modelo',true); return; }
-
   const btn = document.querySelector('#tab-models .btn');
   btn.disabled=true; btn.textContent='Guardando...';
-
   try {
-    const p = new URLSearchParams({action:'addModel', name, cat:selectedModelCat});
+    const p = new URLSearchParams({action:'addModel',name,cat:selectedModelCat});
     const res  = await fetch(CFG.scriptUrl+'?'+p.toString());
     const data = await res.json();
-    if (data.ok === false) { toast(data.error||'Error',true); }
+    if (data.ok===false) { toast(data.error||'Error',true); }
     else {
-      MODELS.push({name, cat:selectedModelCat});
+      MODELS.push({name,cat:selectedModelCat});
       document.getElementById('m-name').value='';
       toast(`✓ Modelo añadido en ${selectedModelCat}`);
-      renderModels();
-      populateDrop();
+      renderModels(); populateDrop();
     }
   } catch(e) { toast('Error de conexión',true); }
-
   btn.disabled=false; btn.textContent='+ AÑADIR MODELO';
 }
 
@@ -604,10 +861,10 @@ function renderModels() {
   if (!el) return;
   const list = mFilter==='Todos' ? MODELS : MODELS.filter(m=>m.cat===mFilter);
   if (!list.length) {
-    el.innerHTML='<div class="empty" style="padding:18px 0"><p>Sin modelos. Añade el primero arriba.</p></div>';
+    el.innerHTML='<div class="empty" style="padding:16px 0"><p>Sin modelos. Añade el primero arriba.</p></div>';
     return;
   }
-  el.innerHTML='<div class="mgrid">'+list.map((m,i)=>{
+  el.innerHTML='<div class="mgrid">'+list.map(m=>{
     const ri=MODELS.indexOf(m);
     return `<div class="mitem">
       <div class="minfo">
@@ -626,21 +883,17 @@ function askDel(idx) {
   document.getElementById('modal-ov').classList.add('open');
 }
 function closeModal() { pendDel=null; document.getElementById('modal-ov').classList.remove('open'); }
-
 async function confirmDel() {
   if (pendDel===null) return;
   const m = MODELS[pendDel];
   closeModal();
   try {
-    const p = new URLSearchParams({action:'deleteModel', name:m.name, cat:m.cat});
+    const p = new URLSearchParams({action:'deleteModel',name:m.name,cat:m.cat});
     await fetch(CFG.scriptUrl+'?'+p.toString());
     MODELS.splice(pendDel,1);
-    toast('Modelo eliminado');
-    renderModels();
-    populateDrop();
+    toast('Modelo eliminado'); renderModels(); populateDrop();
   } catch(e) { toast('Error al eliminar',true); }
 }
-
 document.getElementById('modal-ov').addEventListener('click',e=>{
   if(e.target===document.getElementById('modal-ov')) closeModal();
 });
