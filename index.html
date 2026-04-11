@@ -580,9 +580,11 @@ function closeConfirm() {
 }
 
 async function doSubmit() {
-  closeConfirm();
-  if (!pendingSubmitData) return;
-  const { num, ref, who, cat, zona } = pendingSubmitData;
+  const data = pendingSubmitData;
+  document.getElementById('confirm-ov').style.display = 'none';
+  pendingSubmitData = null;
+  if (!data) return;
+  const { num, ref, who, cat, zona } = data; 
 
   const btn = document.getElementById('btn-submit');
   btn.disabled = true; btn.textContent = 'Enviando...';
@@ -598,7 +600,6 @@ async function doSubmit() {
     document.getElementById('f-ref').value = '';
   } catch(e) { toast('Error de conexión',true); }
   btn.disabled = false; btn.textContent = '✓ REGISTRAR CAMBIO';
-  pendingSubmitData = null;
 }
 
 // ══ URGENT ALERT ON LOAD ══
